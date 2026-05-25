@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mámina Melounová Akademie 🍉</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green-dark: #1a5c2e;
+    --green: #2d8c4e;
+    --green-light: #5cbf7a;
+    --red: #e8324a;
+    --red-light: #ff6b7a;
+    --yellow: #ffd93d;
+    --orange: #ff9f1c;
+    --cream: #fff9f0;
+    --brown: #6b3f1e;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Nunito', 'Segoe UI', Tahoma, sans-serif;
+    background: var(--cream);
+    min-height: 100vh;
+    overflow-x: hidden;
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Ctext y='26' font-size='26'%3E%F0%9F%8D%89%3C/text%3E%3C/svg%3E") 16 16, auto;
+  }
+
+  /* ── Floating bg ── */
+  .bg-melons { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+  .bg-melon {
+    position: absolute; font-size: 3rem; opacity: 0.08;
+    animation: floatMelon linear infinite;
+  }
+  @keyframes floatMelon {
+    0%   { transform: translateY(110vh) rotate(0deg); }
+    100% { transform: translateY(-20vh) rotate(360deg); }
+  }
+
+  /* ── Hero ── */
+  .hero {
+    position: relative; z-index: 1;
+    background: linear-gradient(135deg, var(--green-dark) 0%, var(--green) 50%, var(--green-light) 100%);
+    text-align: center;
+    padding: 60px 20px 80px;
+    clip-path: ellipse(100% 90% at 50% 10%);
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(circle at 30% 50%, rgba(255,217,61,0.15) 0%, transparent 60%),
+                radial-gradient(circle at 70% 30%, rgba(255,107,122,0.1) 0%, transparent 50%);
+  }
+  .diploma-badge {
+    display: inline-block;
+    background: var(--yellow);
+    color: var(--brown);
+    font-family: 'Fredoka', 'Segoe UI', sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 6px 18px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    animation: wiggle 2s ease-in-out infinite;
+    position: relative; z-index: 1;
+  }
+  @keyframes wiggle {
+    0%,100% { transform: rotate(-2deg); }
+    50% { transform: rotate(2deg); }
+  }
+  .hero h1 {
+    font-family: 'Fredoka', 'Segoe UI', sans-serif;
+    font-weight: 700;
+    font-size: clamp(2.2rem, 6vw, 4rem);
+    color: white;
+    line-height: 1.1;
+    text-shadow: 3px 4px 0px rgba(0,0,0,0.2);
+    position: relative; z-index: 1;
+  }
+  .hero h1 span { color: var(--yellow); }
+  .hero p {
+    color: rgba(255,255,255,0.85);
+    font-size: 1.1rem;
+    margin-top: 12px;
+    position: relative; z-index: 1;
+    font-weight: 600;
+  }
+  .melon-emoji-row {
+    font-size: 2.5rem; margin-top: 24px;
+    position: relative; z-index: 1;
+    display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+  }
+  .melon-emoji-row span {
+    display: inline-block;
+    animation: bounce 1.5s ease-in-out infinite;
+    cursor: pointer;
+  }
+  .melon-emoji-row span:hover { transform: scale(1.4) rotate(15deg) !important; }
+  .melon-emoji-row span:nth-child(2) { animation-delay: 0.2s; }
+  .melon-emoji-row span:nth-child(3) { animation-delay: 0.4s; }
+  .melon-emoji-row span:nth-child(4) { animation-delay: 0.6s; }
+  @keyframes bounce {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+  }
+
+  /* ── Container ── */
+  .container { max-width: 900px; margin: 0 auto; padding: 40px 20px 60px; position: relative; z-index: 1; }
+
+  .section-title {
+    font-family: 'Fredoka', 'Segoe UI', sans-serif;
+    font-weight: 700;
+    font-size: 1.8rem;
+    color: var(--green-dark);
+    text-align: center;
+    margin: 40px 0 20px;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+  }
+
+  /* ── Weather box ── */
+  .weather-box {
+    background: linear-gradient(135deg, var(--green-dark), var(--green));
+    border-radius: 24px; padding: 28px; color: white;
+    text-align: center; position: relative; overflow: hidden;
+    transition: background 0.5s;
+  }
+  .weather-box.rainy  { background: linear-gradient(135deg, #2c3e6b, #4a6fa5); }
+  .weather-box.cloudy { background: linear-gradient(135deg, #4a5568, #718096); }
+  .weather-box::before {
+    content: var(--wx-icon, '☀️'); position: absolute; right: 20px; top: 20px;
+    font-size: 4rem; opacity: 0.3;
+    animation: rotateSun 8s linear infinite;
+  }
+  @keyframes rotateSun { to { transform: rotate(360deg); } }
+  .weather-box h3 {
+    font-family: 'Fredoka', 'Segoe UI', sans-serif;
+    font-weight: 700; font-size: 1.5rem; margin-bottom: 6px;
+  }
+  .weather-box .big-temp {
+    font-family: 'Fredoka', 'Segoe UI', sans-serif;
+    font-weight: 700; font-size: 3.5rem; min-height: 4rem;
+  }
+  .weather-box .wx-detail {
+    opacity: 0.85; font-size: 0.92rem; margin-top: 4px;
+    display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
+  }
+  .weather-box .wx-detail span { background: rgba(255,255,255,0.15); border-radius: 20px; padding: 3px 12px; }
+  .weather-box p { opacity: 0.85; font-size: 0.95rem; margin-top: 8px; }
+  .weather-box .go-signal {
+    margin-top: 16px; background: var(--yellow); color: var(--brown);
+    display: inline-block; padding: 10px 24px; border-radius: 50px;
+    font-weight: 800; font-size: 1rem;
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+  .weather-box .warn-signal {
+    margin-top: 16px; background: #ff6b6b; color: white;
+    display: inline-block; padding: 10px 24px; border-radius: 50px;
+    font-weight: 800; font-size: 1rem;
+  }
+  @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+  .wx-loading { opacity: 0.6; font-style: italic; font-size: 0.9rem; }
+
+  /* ── Melon profiles ── */
+  .melon-profiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; }
+  .melon-card {
+    border-radius: 28px; padding: 30px 24px 24px;
+    text-align: center; position: relative; overflow: hidden;
+    transition: transform 0.3s; cursor: default;
+  }
+  .melon-card:hover { transform: scale(1.04) rotate(1deg); }
+  .melon-card.watermelon { background: linear-gradient(145deg, #fff0f2, #ffe0e5); border: 3px solid var(--red-light); }
+  .melon-card.cantaloupe { background: linear-gradient(145deg, #fff8e8, #ffedd0); border: 3px solid var(--orange); }
+  .melon-card.galia      { background: linear-gradient(145deg, #f0fff4, #d4f5de); border: 3px solid var(--green-light); }
+  .melon-card .big-emoji { font-size: 4rem; display: block; margin-bottom: 8px; }
+  .melon-card:hover .big-emoji { animation: spin360 0.5s ease forwards; }
+  @keyframes spin360 { to { transform: rotate(360deg); } }
+  .melon-card h3 {
+    font-family: 'Fredoka', 'Segoe UI', sans-serif;
+    font-weight: 700; font-size: 1.4rem; margin-bottom: 6px;
+  }
+  .melon-card.watermelon h3 { color: var(--red); }
+  .melon-card.cantaloupe h3 { color: #c45e00; }
+  .melon-card.galia h3      { color: var(--green-dark); }
+  .melon-card .subtitle { font-size: 0.8rem; opacity: 0.6; font-style: italic; margin-bottom: 14px; }
+  .melon-card .stat {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 6px 0; border-bottom: 1px dashed rgba(0,0,0,0.1); font-size: 0.9rem;
+  }
+  .melon-card .stat:last-child { border-bottom: none; }
+  .melon-card .stat .label { color: #666; }
+  .melon-card .stat .value { font-weight: 800; }
+  .melon-card.watermelon .stat .value { color: var(--red); }
+  .melon-card.cantaloupe .stat .value { color: #c45e00; }
+  .melon-card.galia .stat .value      { color: var(--green); }
+
+  /* ── Wisdom ── */
+  .wisdom { display: flex; flex-direction: column; gap: 14px; }
+  .wisdom-item {
+    background: white; border-radius: 16px; padding: 18px 22px;
+    display: flex; align-items: flex-start; gap: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06); transition: transform 0.2s;
+  }
+  .wisdom-item:hover { transform: translateX(8px); }
+  .wisdom-item .num {
+    background: var(--green); color: white;
+    font-family: 'Fredoka', 'Segoe UI', sans-serif;
+    font-weight: 700; font-size: 1.2rem;
+    width: 38px; height: 38px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .wisdom-item h4 { font-size: 1rem; color: var(--green-dark); margin-bottom: 2px; }
+  .wisdom-item p { font-size: 0.9rem; color: #666; }
+
+  /* ── Danger zone ── */
+  .danger-zone {
+    background: linear-gradient(135deg, #fff5f5, #ffebeb);
+    border: 3px dashed var(--red-light); border-radius: 24px; padding: 30px;
+  }
+  .danger-zone h2 {
+    font-family: 'Fredoka', 'Segoe UI', sans-serif;
+    font-weight: 700; color: var(--red); font-size: 1.6rem;
+    margin-bottom: 16px; display: flex; align-items: center; gap: 10px;
+  }
+  .danger-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .danger-list li {
+    display: flex; align-items: flex-start; gap: 12px;
+    font-size: 0.95rem; color: #555;
+  }
+  .danger-list li::before { content: '💀'; font-size: 1.1rem; flex-shrink: 0; }
+
+  /* ── Cards ── */
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+  .card {
+    background: white; border-radius: 24px; padding: 28px 24px;
+    box-shadow: 0 6px 30px rgba(0,0,0,0.08);
+    border: 3px solid transparent;
+    transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+    position: relative; overflow: hidden;
+  }
+  .card:hover {
+    transform: translateY(-6px) rotate(-1deg);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.14);
+    border-color: var(--green-light);
+  }
+  .card-icon { font-size: 2.4rem; margin-bottom: 12px; display: block; }
+  .card h3 {
+    font-family: 'Fredoka', 'Segoe UI', sans-serif;
+    font-weight: 700; font-size: 1.3rem; color: var(--green-dark); margin-bottom: 8px;
+  }
+  .card p { color: #555; font-size: 0.95rem; line-height: 1.6; }
+  .card .tip {
+    margin-top: 12px; background: #f0fdf4;
+    border-left: 4px solid var(--green-light);
+    padding: 8px 12px; border-radius: 0 10px 10px 0;
+    font-size: 0.88rem; color: var(--green-dark); font-weight: 700;
+  }
+
+  /* ── Funny facts ── */
+  .facts-section {
+    background: linear-gradient(135deg, #fffbe6, #fff3cc);
+    border: 3px solid var(--yellow);
+    border-radius: 28px;
+    padding: 32px 28px;
+    margin-top: 40px;
+  }
+  .facts-section h2 {
+    font-family: 'Fredoka', 'Segoe UI', sans-serif;
+    font-weight: 700; font-size: 1.7rem; color: #8a6000;
+    margin-bottom: 20px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .facts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+  }
+  .fact-card {
+    background: white;
+    border-radius: 18px;
+    padding: 20px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+    transition: transform 0.25s;
+    cursor: default;
+    position: relative;
+  }
+  .fact-card:hover { transform: translateY(-5px) rotate(1deg); }
+  .fact-emoji {
+    font-size: 2.2rem;
+    display: block;
+    margin-bottom: 8px;
+  }
+  .fact-card p {
+    font-size: 0.92rem;
+    color: #444;
+    line-height: 1.55;
+  }
+  .fact-card .fact-label {
+    font-family: 'Fredoka', 'Segoe UI', sans-serif;
+    font-weight: 700;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #b8860b;
+    margin-bottom: 6px;
+    display: block;
+  }
+  .fact-card strong { color: var(--green-dark); }
+
+  /* ── Confetti ── */
+  .confetti-piece {
+    position: fixed; width: 10px; height: 10px;
+    border-radius: 2px; pointer-events: none; z-index: 9999;
+    animation: confettiFall 1.2s ease-out forwards;
+  }
+  @keyframes confettiFall {
+    0% { opacity: 1; transform: translateY(0) rotate(0deg); }
+    100% { opacity: 0; transform: translateY(180px) rotate(720deg); }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-melons" id="bgMelons"></div>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="diploma-badge">🏅 Oficiální melounová příručka</div>
+  <h1>Mámina<br><span>Melounová Akademie</span> 🎓</h1>
+  <p>Kompletní průvodce pro budoucí šampionku melounářství</p>
+  <div class="melon-emoji-row">
+    <span title="Vodní meloun">🍉</span>
+    <span title="Cantaloupe">🍈</span>
+    <span title="Galia meloun">🍈</span>
+    <span title="Diplom čeká!">🏆</span>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- Počasí Brno – live -->
+  <div class="weather-box" id="weatherBox" style="margin-bottom: 40px;">
+    <h3>📍 Brno – aktuální počasí</h3>
+    <div class="big-temp" id="wxTemp"><span class="wx-loading">načítám... 🌱</span></div>
+    <div class="wx-detail" id="wxDetail"></div>
+    <p id="wxDesc"></p>
+    <div id="wxSignal"></div>
+  </div>
+
+  <!-- Profily melounů -->
+  <h2 class="section-title">🍉 Tvoji tři svěřenci</h2>
+  <div class="melon-profiles">
+    <div class="melon-card watermelon">
+      <span class="big-emoji">🍉</span>
+      <h3>Crimson Red</h3>
+      <div class="subtitle">vodní meloun • velký frajer</div>
+      <div class="stat"><span class="label">Zrání</span><span class="value">75–90 dní</span></div>
+      <div class="stat"><span class="label">Hmotnost</span><span class="value">3–8 kg</span></div>
+      <div class="stat"><span class="label">Teplo</span><span class="value">⭐⭐⭐ (mlsný)</span></div>
+      <div class="stat"><span class="label">Zralý když</span><span class="value">dutý zvuk 🥁</span></div>
+    </div>
+    <div class="melon-card cantaloupe">
+      <span class="big-emoji">🍈</span>
+      <h3>Cantaloupe</h3>
+      <div class="subtitle">síťkovaný meloun • voňavec</div>
+      <div class="stat"><span class="label">Zrání</span><span class="value">70–80 dní</span></div>
+      <div class="stat"><span class="label">Hmotnost</span><span class="value">1–3 kg</span></div>
+      <div class="stat"><span class="label">Obtížnost</span><span class="value">nejsnazší 😎</span></div>
+      <div class="stat"><span class="label">Zralý když</span><span class="value">sám odpadne 🫳</span></div>
+    </div>
+    <div class="melon-card galia">
+      <span class="big-emoji">🍈</span>
+      <h3>Galia</h3>
+      <div class="subtitle">galia meloun • zlatíčko</div>
+      <div class="stat"><span class="label">Zrání</span><span class="value">70–80 dní</span></div>
+      <div class="stat"><span class="label">Hmotnost</span><span class="value">1–2 kg</span></div>
+      <div class="stat"><span class="label">Vůně</span><span class="value">intenzivní 👃</span></div>
+      <div class="stat"><span class="label">Zralý když</span><span class="value">zlatavý + voní</span></div>
+    </div>
+  </div>
+
+  <!-- Desatero -->
+  <h2 class="section-title">🌱 Desatero melounářky</h2>
+  <div class="wisdom">
+    <div class="wisdom-item">
+      <div class="num">1</div>
+      <div><h4>Slunce, slunce, slunce</h4><p>Aspoň 8 hodin denně. Méně slunce = méně sladkosti. Jednoduché.</p></div>
+    </div>
+    <div class="wisdom-item">
+      <div class="num">2</div>
+      <div><h4>Sázet opatrně jako čínský porcelán</h4><p>Kořeny melounu jsou citlivé jako umělecká duše. Žádné trhání, žádná hrubost.</p></div>
+    </div>
+    <div class="wisdom-item">
+      <div class="num">3</div>
+      <div><h4>Mulčovat = zlatý tah</h4><p>Sláma nebo černá folie pod rostliny. Teplo drží, plevel nevzroste, melouny budou nadšené.</p></div>
+    </div>
+    <div class="wisdom-item">
+      <div class="num">4</div>
+      <div><h4>Zalévat DOLE, ne shora</h4><p>Voda na listy = pozvánka pro plísně. Vždy přímo k zemi, k patě rostliny.</p></div>
+    </div>
+    <div class="wisdom-item">
+      <div class="num">5</div>
+      <div><h4>Vyštípnout vrchol po 4. listu</h4><p>Zní krutě, ale funguje. Rostlina začne větvit a nasadí víc plodů.</p></div>
+    </div>
+    <div class="wisdom-item">
+      <div class="num">6</div>
+      <div><h4>Max 2–4 plody na rostlinu</h4><p>Méně = větší a sladší. Víc plodů = mrňavé a fádní. Buď rozhodná!</p></div>
+    </div>
+    <div class="wisdom-item">
+      <div class="num">7</div>
+      <div><h4>Hnojit chytře</h4><p>Nejdřív dusík (listy), po nasazení plodů přejít na draslík (= sladkost a aroma).</p></div>
+    </div>
+    <div class="wisdom-item">
+      <div class="num">8</div>
+      <div><h4>Před sklizní zmenšit zálivku</h4><p>2–3 týdny před sklizní méně vody. Cukry se soustředí, meloun bude jako med. 🍯</p></div>
+    </div>
+    <div class="wisdom-item">
+      <div class="num">9</div>
+      <div><h4>Velké plody podložit</h4><p>Vodní meloun na zemi – podlož prknem nebo taškou. Zabrání hnití a útokům slimáků.</p></div>
+    </div>
+    <div class="wisdom-item">
+      <div class="num">10</div>
+      <div><h4>Sklízet ve správný čas</h4><p>Watermelon: dutý zvuk při poklepu. Cantaloupe: sám se uvolní. Galia: zlatá barva + silná vůně.</p></div>
+    </div>
+  </div>
+
+  <!-- Danger zone -->
+  <div class="danger-zone" style="margin-top: 40px;">
+    <h2>☠️ Zakázané věci</h2>
+    <ul class="danger-list">
+      <li>Sázet do studené půdy pod 18 °C – melouny to znají a sabotují tě</li>
+      <li>Zalévat shora na listy – přivítáš plísně, které nechceš</li>
+      <li>Nechat 8 plodů na rostlině – dostaneš osm zklamání místo čtyř triumfů</li>
+      <li>Zapomenout na hnojení po nasazení plodů – meloun bude vodnatý a bez chuti</li>
+      <li>Sklízet příliš brzy – nedozrálý meloun je kriminální čin proti přírodě</li>
+    </ul>
+  </div>
+
+  <!-- Karty péče -->
+  <h2 class="section-title">💧 Péče v kostce</h2>
+  <div class="cards">
+    <div class="card">
+      <span class="card-icon">💧</span>
+      <h3>Zálivka</h3>
+      <p>Pravidelná, rovnoměrná. Klíčové je období růstu plodů – tady šetřit nestačí.</p>
+      <div class="tip">2–3 týdny před sklizní omez vodu → MAX sladkost!</div>
+    </div>
+    <div class="card">
+      <span class="card-icon">🌿</span>
+      <h3>Prostor</h3>
+      <p>80–100 cm mezi rostlinami, řady 150 cm. Meloun je jako teenager – potřebuje prostor.</p>
+      <div class="tip">Vertikálně na mříž → ušetříš místo, plody podváž síťkou</div>
+    </div>
+    <div class="card">
+      <span class="card-icon">🌡️</span>
+      <h3>Teplota půdy</h3>
+      <p>Min. 18–20 °C pro výsadbu. V Brně teď ideální. Nelení a sázej!</p>
+      <div class="tip">Brno 25. května 2026: 25 °C ☀️ = PERFEKTNÍ timing</div>
+    </div>
+    <div class="card">
+      <span class="card-icon">🌱</span>
+      <h3>Půda</h3>
+      <p>Propustná, hlinito-písčitá, pH 6,0–6,8. Přidej kompost nebo hnůj.</p>
+      <div class="tip">Mulčování slámou = chytrý tah každého melounáře</div>
+    </div>
+  </div>
+
+  <!-- FUNNY FACTS -->
+  <div class="facts-section">
+    <h2>🤓 Věděla jsi, že...?</h2>
+    <div class="facts-grid">
+
+      <div class="fact-card">
+        <span class="fact-emoji">🏺</span>
+        <span class="fact-label">Historický fakt</span>
+        <p>Melouny se pěstují <strong>už přes 5 000 let</strong>. Jejich semena našli archeologové ve starověkém Egyptě. Faraoni jedli melouny. Jsi tedy v dobré společnosti.</p>
+      </div>
+
+      <div class="fact-card">
+        <span class="fact-emoji">💦</span>
+        <span class="fact-label">Vodní fakt</span>
+        <p>Vodní meloun je z <strong>92 % voda</strong>. Takže až ho sníš, vlastně jsi vypila sklenici vody. Jen mnohem chutnější. Logika zahrádkářky.</p>
+      </div>
+
+      <div class="fact-card">
+        <span class="fact-emoji">🥗</span>
+        <span class="fact-label">Záhadný fakt</span>
+        <p>Meloun je <strong>botanicky zelenina</strong> (plod tykvovité rostliny), ale v obchodě ho najdeš u ovoce. Svět je plný lží. Hlavně že chutná.</p>
+      </div>
+
+      <div class="fact-card">
+        <span class="fact-emoji">🌍</span>
+        <span class="fact-label">Světový rekord</span>
+        <p>Největší vodní meloun na světě vážil <strong>159 kg</strong>. To je víc než průměrný dospělý člověk. Nepředbíhej se, začni skromněji.</p>
+      </div>
+
+      <div class="fact-card">
+        <span class="fact-emoji">🇯🇵</span>
+        <span class="fact-label">Japonský šílenec</span>
+        <p>V Japonsku se prodávají <strong>čtvercové melouny</strong> pěstované v krabici. Stojí až 200 dolarů kus. Brněnský čtvercový meloun zatím na trhu není, ale nikdy neříkej nikdy.</p>
+      </div>
+
+      <div class="fact-card">
+        <span class="fact-emoji">🌱</span>
+        <span class="fact-label">Příbuzní fakt</span>
+        <p>Meloun je příbuzný s <strong>okurkou, dýní a cuketou</strong>. Celá tykvovitá rodina na jednom záhonu. Rodinná sešlost přímo v zahradě.</p>
+      </div>
+
+      <div class="fact-card">
+        <span class="fact-emoji">🎵</span>
+        <span class="fact-label">Zvukový fakt</span>
+        <p>Zralý vodní meloun pozná zkušená melounářka <strong>poslechem</strong> – dutý tón = zralý, tupý = nezralý. Zahradničení jako hudební nástroj.</p>
+      </div>
+
+      <div class="fact-card">
+        <span class="fact-emoji">🐝</span>
+        <span class="fact-label">Včelí fakt</span>
+        <p>Melounové květy potřebují ke správnému opylení <strong>včely</strong>. Více návštěv včel = více plodů. Důvod číslo 1 proč mít v zahradě levanduli vedle melounu.</p>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<script>
+  // ── Floating bg melons ──
+  const emojis = ['🍉','🍈','🌿','🌱','☀️','💧'];
+  const bg = document.getElementById('bgMelons');
+  for (let i = 0; i < 18; i++) {
+    const el = document.createElement('div');
+    el.className = 'bg-melon';
+    el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    el.style.left = Math.random() * 100 + 'vw';
+    el.style.animationDuration = (12 + Math.random() * 20) + 's';
+    el.style.animationDelay = (-Math.random() * 20) + 's';
+    el.style.fontSize = (1.5 + Math.random() * 2.5) + 'rem';
+    bg.appendChild(el);
+  }
+
+  // ── Confetti on click ──
+  const colors = ['#e8324a','#2d8c4e','#ffd93d','#ff9f1c','#5cbf7a','#ff6b7a'];
+  document.addEventListener('click', (e) => {
+    for (let i = 0; i < 10; i++) {
+      const c = document.createElement('div');
+      c.className = 'confetti-piece';
+      c.style.left = (e.clientX + (Math.random()-0.5)*60) + 'px';
+      c.style.top = (e.clientY + (Math.random()-0.5)*30) + 'px';
+      c.style.background = colors[Math.floor(Math.random()*colors.length)];
+      c.style.transform = `rotate(${Math.random()*360}deg)`;
+      c.style.animationDelay = (Math.random()*0.2) + 's';
+      document.body.appendChild(c);
+      setTimeout(() => c.remove(), 1400);
+    }
+  });
+
+  // ── Live počasí – Open-Meteo (zdarma, bez API klíče) ──
+  // Brno: 49.1951° N, 16.6068° E
+  async function loadWeather() {
+    const url =
+      'https://api.open-meteo.com/v1/forecast' +
+      '?latitude=49.1951&longitude=16.6068' +
+      '&current=temperature_2m,apparent_temperature,precipitation,weathercode,windspeed_10m,relativehumidity_2m' +
+      '&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,weathercode' +
+      '&timezone=Europe%2FPrague&forecast_days=3';
+
+    // WMO kódy → emoji + popis + kategorie
+    function wxInfo(code) {
+      if (code === 0)            return { icon: '☀️', desc: 'Jasno',              cat: 'sun' };
+      if (code <= 2)             return { icon: '🌤️', desc: 'Převážně jasno',     cat: 'sun' };
+      if (code === 3)            return { icon: '☁️', desc: 'Zataženo',           cat: 'cloud' };
+      if (code <= 49)            return { icon: '🌫️', desc: 'Mlha',               cat: 'cloud' };
+      if (code <= 59)            return { icon: '🌦️', desc: 'Mrholení',           cat: 'rain' };
+      if (code <= 69)            return { icon: '🌧️', desc: 'Déšť',               cat: 'rain' };
+      if (code <= 79)            return { icon: '❄️', desc: 'Sníh',               cat: 'rain' };
+      if (code <= 84)            return { icon: '🌦️', desc: 'Přeháňky',           cat: 'rain' };
+      if (code <= 94)            return { icon: '⛈️', desc: 'Bouřky',             cat: 'rain' };
+      return                            { icon: '🌩️', desc: 'Bouřky s krupobitím', cat: 'rain' };
+    }
+
+    // melounové hodnocení dle teploty
+    function melonRating(temp) {
+      if (temp >= 28) return { signal: 'go',   text: '🔥 Melouny jsou v extázi! Ideální počasí.' };
+      if (temp >= 22) return { signal: 'go',   text: '✅ Skvělé melounové počasí. Sázej!' };
+      if (temp >= 18) return { signal: 'go',   text: '👍 Slušné, melouny budou spokojené.' };
+      if (temp >= 14) return { signal: 'warn', text: '⚠️ Trochu chladno. Melouny mračí.' };
+      return                { signal: 'warn', text: '🥶 Na sázení příliš chladno!' };
+    }
+
+    try {
+      const res = await fetch(url);
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const d = await res.json();
+      const c = d.current;
+      const wx = wxInfo(c.weathercode);
+      const temp = Math.round(c.temperature_2m);
+      const feel = Math.round(c.apparent_temperature);
+      const rating = melonRating(temp);
+
+      // ikona do CSS custom property pro ::before
+      document.getElementById('weatherBox').style.setProperty('--wx-icon', `'${wx.icon}'`);
+      if (wx.cat === 'rain')  document.getElementById('weatherBox').classList.add('rainy');
+      if (wx.cat === 'cloud') document.getElementById('weatherBox').classList.add('cloudy');
+
+      document.getElementById('wxTemp').textContent = `${temp} °C ${wx.icon}`;
+      document.getElementById('wxDetail').innerHTML =
+        `<span>Pocitově ${feel} °C</span>` +
+        `<span>Vítr ${Math.round(c.windspeed_10m)} km/h</span>` +
+        `<span>Vlhkost ${c.relativehumidity_2m} %</span>`;
+      document.getElementById('wxDesc').textContent = wx.desc;
+
+      const signalEl = document.getElementById('wxSignal');
+      signalEl.innerHTML = `<div class="${rating.signal === 'go' ? 'go-signal' : 'warn-signal'}">${rating.text}</div>`;
+
+    } catch (err) {
+      // tiché fallback – žádný crash, jen neukazujeme data
+      console.warn('Počasí se nepodařilo načíst:', err);
+      document.getElementById('wxTemp').textContent = '– °C';
+      document.getElementById('wxDesc').textContent = 'Počasí se nepodařilo načíst.';
+    }
+  }
+
+  loadWeather();
+</script>
+</body>
+</html>
